@@ -9,7 +9,8 @@ import (
 )
 
 type FabricContr struct {
-	Ctx iris.Context
+	Ctx iris.Context;
+	Fabric fabricservice.FabricService;
 }
 
 //开发者可以在BeforeActivation方法中来处理请求定义
@@ -26,9 +27,11 @@ func (f *FabricContr) QueryProducts() interface{} {
 	startKey := f.Ctx.URLParam("startKey")
 	endKey := f.Ctx.URLParam("endKey")
 	if len(startKey) > 0 && len(endKey) > 0 {
-		return fabricservice.QueryProductsRange(startKey, endKey)
+		result,_ := f.Fabric.QueryProductsRange(startKey, endKey)
+		return result
 	} else {
-		return fabricservice.QueryProductNo(id)
+		result,_ := f.Fabric.QueryProductNo(id)
+		return result
 	}
 	// return id
 }
@@ -57,7 +60,7 @@ func (f *FabricContr) PostProduct() interface{} {
 	if err != nil {
 		return err
 	}
-	// return fabricservice.PostProduct(name,productor,addr,id,millPrice,price,desc,owner)
+	// return fabricservice.IssueProduct(name,productor,addr,id,millPrice,price,desc,owner)
 	return result
 }
 
