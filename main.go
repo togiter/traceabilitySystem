@@ -7,7 +7,7 @@ import (
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
 	"github.com/kataras/iris/mvc"
-	"github.com/traceabilitySystem/controllers"
+	"github.com/traceability-system/controllers"
 )
 
 /*golang iris mvc框架的服务端加载过程

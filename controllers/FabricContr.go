@@ -23,12 +23,12 @@ func (f *FabricContr) BeforeActivation(a mvc.BeforeActivation) {
 
 func (f *FabricContr) QueryProducts() interface{} {
 	id := f.Ctx.URLParam("number")
-	startKey = f.Ctx.URLParam("startKey")
+	startKey := f.Ctx.URLParam("startKey")
 	endKey := f.Ctx.URLParam("endKey")
-	if(startKey && endKey && len(startKey) > 0 && len(endKey) > 0){
-		return fabricservice.queryProductsRange(startkey,endKey)
-	}else{
-	   return fabricservice.queryProductNo(id)
+	if len(startKey) > 0 && len(endKey) > 0 {
+		return fabricservice.QueryProductsRange(startKey, endKey)
+	} else {
+		return fabricservice.QueryProductNo(id)
 	}
 	// return id
 }
