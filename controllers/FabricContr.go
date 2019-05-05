@@ -5,6 +5,7 @@ import (
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
+	"github.com/traceability-system/fabric/fabricservice"
 )
 
 type FabricContr struct {
@@ -16,6 +17,20 @@ func (f *FabricContr) BeforeActivation(a mvc.BeforeActivation) {
 	a.Handle("GET", "/info", "QueryInfo")
 	//发布产品
 	a.Handle("POST", "/postProduct", "PostProduct")
+	//查询产品
+	a.Handle("GET", "/queryProducts", "QueryProducts")
+}
+
+func (f *FabricContr) QueryProducts() interface{} {
+	id := f.Ctx.URLParam("number")
+	startKey = f.Ctx.URLParam("startKey")
+	endKey := f.Ctx.URLParam("endKey")
+	if(startKey && endKey && len(startKey) > 0 && len(endKey) > 0){
+		return fabricservice.queryProductsRange(startkey,endKey)
+	}else{
+	   return fabricservice.queryProductNo(id)
+	}
+	// return id
 }
 
 func (f *FabricContr) PostProduct() interface{} {
@@ -42,6 +57,7 @@ func (f *FabricContr) PostProduct() interface{} {
 	if err != nil {
 		return err
 	}
+	// return fabricservice.PostProduct(name,productor,addr,id,millPrice,price,desc,owner)
 	return result
 }
 
