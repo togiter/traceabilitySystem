@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>产品发布</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../css/main.css">
+    </head>
+    <body>
+        <div class="mainCss">
+            <form method="POST" action="/fabric/postProduct">
+                产品名称:<input type="text" name="name" value="AI眼镜"><br>
+                产品编号:<input type="text" name="number" value="a1a2a3"><br>
+                出厂价格:<input type="number" name="millPrice" value="12"><br>
+                零售价格:<input type="number" name="price" value="1000"><br>
+                出厂地址:<input type="text" name="addr" value="广州"><br>
+                生产商家:<input type="text"  name="productor" value="fb"><br>
+                经销商家:<input type="text"  name="owner"   value="IBM"><br>
+                描述:<textarea name="desc"></textarea>
+                <input type="submit" value="发布">
+            </form>
+        </div>
+    </body>
+</html>

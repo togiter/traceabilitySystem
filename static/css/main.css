@@ -1,0 +1,9 @@
+body{
+    text-align: center;
+    vertical-align: middle;
+}
+.mainCss{
+    background-color:beige;
+    width: 60%;
+    height: 60%;
+}
