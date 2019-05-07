@@ -35,7 +35,7 @@ type FabricService struct {
 	OrdererID         string
 	OrdererEndpoint   string //orderer节点地址
 	ChannelConfig     string
-	initialized       bool
+	Initialized       bool
 	channelCli        *channel.Client
 	resmgmtCli        *resmgmt.Client //资源管理客户端(相当于管理员admin)，用以创建或更新通道
 	fsdk              *fabsdk.FabricSDK
@@ -57,8 +57,8 @@ type ChaincodeObj struct {
 	ChaincodePath    string
 }
 
-func (fs *FabricService) Initialized() error {
-	if fs.initialized {
+func (fs *FabricService) Initialize() error {
+	if fs.Initialized {
 		return errors.New("fab sdk 已经初始化")
 	}
 	fmt.Println("fabric sdk 初始化开始....")
@@ -95,6 +95,7 @@ func (fs *FabricService) Initialized() error {
 			return errors.WithMessage(err, "加入通道失败！")
 		}
 	}
+	fs.Initialized = true
 	return nil
 }
 

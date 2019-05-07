@@ -18,10 +18,10 @@ type FabricContr struct {
 func NewFabric() fabricservice.FabricService {
 	fab := fabricservice.FabricService{
 		// fabricservice.ChaincodeObj{
-		ChaincodeID:      "ProductChaincode",
+		ChaincodeID:      "productchaincode",
 		ChaincodeVersion: "v0",
 		GoPath:           os.Getenv("GOPATH"),
-		ChaincodePath:    "github.com/tracechain/chaincode/",
+		ChaincodePath:    "github.com/traceability-system/fabric/chaincode/",
 		// },
 		// fabricservice.OrgObj{
 		OrgID:      "Org1MSP",
@@ -32,8 +32,9 @@ func NewFabric() fabricservice.FabricService {
 		UserName:   "UserName",
 		// },
 		ChannelConfig: "github.com/traceability-system/fabric/configs/artifacts/traceability-system.tx",
+		ConnectionProfile:os.Getenv("GOPATH") + "/src/github.com/traceability-system/fabric/configs/trace-sys.yaml",
 	}
-	err := fab.Initialized()
+	err := fab.Initialize()
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -42,6 +43,9 @@ func NewFabric() fabricservice.FabricService {
 
 //开发者可以在BeforeActivation方法中来处理请求定义
 func (f *FabricContr) BeforeActivation(a mvc.BeforeActivation) {
+	if(f.Fabric.Initialized == false){
+		f.Fabric = NewFabric()
+	}
 	a.Handle("GET", "/info", "QueryInfo")
 	//发布产品
 	a.Handle("POST", "/postProduct", "PostProduct")
