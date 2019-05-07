@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
+	"os"
 
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
@@ -9,8 +11,33 @@ import (
 )
 
 type FabricContr struct {
-	Ctx iris.Context;
-	Fabric fabricservice.FabricService;
+	Ctx    iris.Context
+	Fabric fabricservice.FabricService
+}
+
+func NewFabric() fabricservice.FabricService {
+	fab := fabricservice.FabricService{
+		// fabricservice.ChaincodeObj{
+		ChaincodeID:      "ProductChaincode",
+		ChaincodeVersion: "v0",
+		GoPath:           os.Getenv("GOPATH"),
+		ChaincodePath:    "github.com/tracechain/chaincode/",
+		// },
+		// fabricservice.OrgObj{
+		OrgID:      "Org1MSP",
+		OrgAdmin:   "Admin",
+		OrgPeers:   []string{"peer0.org1.example.com", "peer1.org1.example.com"}, //组织节点
+		TargetPeer: "peer0.org1.example.com",
+		OrgAchor:   "peer0.org1.example.com", //通信描点
+		UserName:   "UserName",
+		// },
+		ChannelConfig: "github.com/traceability-system/fabric/configs/artifacts/traceability-system.tx",
+	}
+	err := fab.Initialized()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return fab
 }
 
 //开发者可以在BeforeActivation方法中来处理请求定义
@@ -27,10 +54,10 @@ func (f *FabricContr) QueryProducts() interface{} {
 	startKey := f.Ctx.URLParam("startKey")
 	endKey := f.Ctx.URLParam("endKey")
 	if len(startKey) > 0 && len(endKey) > 0 {
-		result,_ := f.Fabric.QueryProductsRange(startKey, endKey)
+		result, _ := f.Fabric.QueryProductsRange(startKey, endKey)
 		return result
 	} else {
-		result,_ := f.Fabric.QueryProductNo(id)
+		result, _ := f.Fabric.QueryProductNo(id)
 		return result
 	}
 	// return id

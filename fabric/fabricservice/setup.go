@@ -207,22 +207,40 @@ func CreateChannel(sdk *fabsdk.FabricSDK, ch, chPath, admin, orgName, ordererOrg
 	return true, nil
 }
 
+func ChannelIsExist(rmCli *resmgmt.Client, ch, targetPeer string) (bool, error) {
+	//检查指定通道失败已经被创建
+	channelIsCreated := false
+	chResp, err := rmCli.QueryChannels(resmgmt.WithTargetEndpoints(targetPeer), resmgmt.WithRetry(retry.DefaultResMgmtOpts))
+	if err != nil {
+		return false, errors.WithMessage(err, "查询指定节点上的通道失败！！")
+	}
+	for _, responseChannel := range chResp.Channels {
+		if responseChannel.ChannelId == ch {
+			channelIsCreated = true
+		}
+	}
+
+	if channelIsCreated == true {
+		fmt.Println("通道已经存在！！")
+		return true, nil
+	}
+	return false, nil
+}
+
 /**
 *加入通道，
 *@param ch 通道名称
 *@param peers 要加入通道的节点
-*@param admin管理员
-*@param orgId 所在组织
 *@param ordererEndpoint 排序节点地址
  */
-func JoinChannel(sdk *fabsdk.FabricSDK, ch, admin, orgId, ordererEndpoint string, peers []string) (bool, error) {
-	//准备客户端上下文
-	cliCtx := sdk.Context(fabsdk.WithUser(admin), fabsdk.WithOrg(orgId))
-	//创建资源管理器(join channels,install,instantiate,upgrade chaincodes)
-	rmgmtCli, err := resmgmt.New(cliCtx)
-	if err != nil {
-		return false, errors.WithMessage(err, "join channel，创建资源管理器失败！")
-	}
+func JoinChannel(rmgmtCli *resmgmt.Client, ch, ordererEndpoint string, peers []string) (bool, error) {
+	// //准备客户端上下文
+	// cliCtx := sdk.Context(fabsdk.WithUser(admin), fabsdk.WithOrg(orgId))
+	// //创建资源管理器(join channels,install,instantiate,upgrade chaincodes)
+	// rmgmtCli, err := resmgmt.New(cliCtx)
+	// if err != nil {
+	// 	return false, errors.WithMessage(err, "join channel，创建资源管理器失败！")
+	// }
 	if err := rmgmtCli.JoinChannel(
 		ch,
 		resmgmt.WithRetry(retry.DefaultResMgmtOpts),
