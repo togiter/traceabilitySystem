@@ -29,7 +29,7 @@ func NewFabric() fabricservice.FabricService {
 		OrgPeers:   []string{"peer0.org1.example.com", "peer1.org1.example.com"}, //组织节点
 		TargetPeer: "peer0.org1.example.com",
 		OrgAchor:   "peer0.org1.example.com", //通信描点
-		UserName:   "UserName",
+		UserName:   "User1",
 		// },
 		ChannelConfig: "github.com/traceability-system/fabric/configs/artifacts/traceability-system.tx",
 		ConnectionProfile:os.Getenv("GOPATH") + "/src/github.com/traceability-system/fabric/configs/trace-sys.yaml",
